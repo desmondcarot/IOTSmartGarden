@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.edu.tarc.iotproject" />
+                  <option name="mobileSdkAppId" value="1:845955276328:android:7815c5bfc9cfbace819f1d" />
+                  <option name="projectId" value="iot-assignment-dfbd8" />
+                  <option name="projectNumber" value="845955276328" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "845955276328",
+    "firebase_url": "https://iot-assignment-dfbd8-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "iot-assignment-dfbd8",
+    "storage_bucket": "iot-assignment-dfbd8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:845955276328:android:7815c5bfc9cfbace819f1d",
+        "android_client_info": {
+          "package_name": "com.edu.tarc.iotproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAA74fpIaMm9S93Bzpau7k-LH5PnmF21IQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
