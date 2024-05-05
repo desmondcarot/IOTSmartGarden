@@ -30,7 +30,7 @@
             android:name=".Light"
             android:exported="false" />
         <activity
-            android:name=".BirdFeed"
+            android:name=".BirdModule.BirdFeed"
             android:exported="false" />
         <activity
             android:name=".AquariumModule.Aquarium"

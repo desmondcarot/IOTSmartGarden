@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BirdFeed">
+    tools:context=".BirdModule.BirdFeed">
 
     <ImageView
         android:id="@+id/btnSmartBirdFeed"
@@ -51,34 +51,34 @@
         android:layout_width="134dp"
         android:layout_height="32dp"
         android:layout_marginStart="21dp"
-        android:layout_marginTop="203dp"
         android:layout_marginEnd="256dp"
         android:text="Current Sound Level: "
+        app:layout_constraintBottom_toBottomOf="@+id/txtsoundLevel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/txtsoundLevel" />
 
     <EditText
-        android:id="@+id/distance"
+        android:id="@+id/txtdistance"
         android:layout_width="171dp"
         android:layout_height="40dp"
         android:layout_marginStart="155dp"
-        android:layout_marginTop="248dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/txtsoundLevel" />
 
     <EditText
-        android:id="@+id/soundLevel"
+        android:id="@+id/txtsoundLevel"
         android:layout_width="158dp"
-        android:layout_height="34dp"
+        android:layout_height="48dp"
         android:layout_marginStart="155dp"
-        android:layout_marginTop="202dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/txtCurrentTime" />
 
     <TextView
         android:id="@+id/FeedingStatus"
@@ -92,7 +92,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/status"
+        android:id="@+id/txtStatus"
         android:layout_width="172dp"
         android:layout_height="41dp"
         android:layout_marginTop="297dp"
@@ -117,13 +117,12 @@
         android:layout_width="128dp"
         android:layout_height="42dp"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="248dp"
         android:layout_marginEnd="258dp"
         android:text="Current Distance:"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/txtdistance" />
 
     <Button
         android:id="@+id/FeedingHistory"
@@ -134,5 +133,25 @@
         android:text="Feeding History"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtCurrentTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="@+id/MainTitle"
+        app:layout_constraintStart_toStartOf="@+id/MainTitle"
+        app:layout_constraintTop_toBottomOf="@+id/MainTitle" />
+
+    <TextView
+        android:id="@+id/txtHistoryList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/FeedingHistory" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
