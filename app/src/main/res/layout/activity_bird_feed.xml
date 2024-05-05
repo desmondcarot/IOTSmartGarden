@@ -7,12 +7,132 @@
     android:layout_height="match_parent"
     tools:context=".BirdFeed">
 
+    <ImageView
+        android:id="@+id/btnSmartBirdFeed"
+        android:layout_width="83dp"
+        android:layout_height="58dp"
+        android:background="@drawable/bird"
+        app:layout_constraintBottom_toBottomOf="@+id/MainTitle"
+        app:layout_constraintTop_toTopOf="@+id/MainTitle"
+        tools:srcCompat="@drawable/bird" />
+
+    <EditText
+        android:id="@+id/Date"
+        android:layout_width="208dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="101dp"
+        android:layout_marginTop="107dp"
+        android:layout_marginBottom="762dp"
+        android:ems="10"
+        android:inputType="date"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/MainTitle"
+        app:layout_constraintHorizontal_bias="0.901"
+        app:layout_constraintStart_toStartOf="@+id/MainTitle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
     <TextView
-        android:id="@+id/bird_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="bird module"
+        android:id="@+id/MainTitle"
+        android:layout_width="197dp"
+        android:layout_height="56dp"
+        android:text="Bird Feeding"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/Date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.784" />
+
+    <TextView
+        android:id="@+id/SoundLevel"
+        android:layout_width="134dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="21dp"
+        android:layout_marginTop="203dp"
+        android:layout_marginEnd="256dp"
+        android:text="Current Sound Level: "
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/distance"
+        android:layout_width="171dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="155dp"
+        android:layout_marginTop="248dp"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/soundLevel"
+        android:layout_width="158dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="155dp"
+        android:layout_marginTop="202dp"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/FeedingStatus"
+        android:layout_width="132dp"
+        android:layout_height="33dp"
+        android:layout_marginBottom="52dp"
+        android:text="Feeding status: "
+        app:layout_constraintBottom_toTopOf="@+id/ManualFeeding"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.082"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/status"
+        android:layout_width="172dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="297dp"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintStart_toEndOf="@+id/FeedingStatus"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/ManualFeeding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="391dp"
+        android:text="Manual Feeding"
+        app:layout_constraintEnd_toEndOf="@+id/MainTitle"
+        app:layout_constraintHorizontal_bias="0.555"
+        app:layout_constraintStart_toStartOf="@+id/MainTitle"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/Distance"
+        android:layout_width="128dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="248dp"
+        android:layout_marginEnd="258dp"
+        android:text="Current Distance:"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/FeedingHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="132dp"
+        android:layout_marginTop="452dp"
+        android:text="Feeding History"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
