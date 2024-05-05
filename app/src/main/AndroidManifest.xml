@@ -13,6 +13,17 @@
         android:theme="@style/Theme.IOTSmartGarden"
         tools:targetApi="31">
         <activity
+            android:name=".AquariumModule.MotionCapActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AquariumModule.MotionCapHistoryView"
+            android:exported="false"
+            android:label="@string/title_activity_motion_cap_history_view"
+            android:theme="@style/Theme.IOTSmartGarden" />
+        <activity
+            android:name=".AquariumModule.AquariumViewData"
+            android:exported="false" />
+        <activity
             android:name=".Plant"
             android:exported="false" />
         <activity
@@ -22,7 +33,7 @@
             android:name=".BirdFeed"
             android:exported="false" />
         <activity
-            android:name=".Aquarium"
+            android:name=".AquariumModule.Aquarium"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

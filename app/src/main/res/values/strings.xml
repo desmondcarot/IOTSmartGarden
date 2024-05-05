@@ -2,4 +2,5 @@
     <string name="app_name">IOTSmartGarden</string>
     <string name="title">Smart Garden!</string>
     <string name="config"><u>Configs</u></string>
+    <string name="title_activity_motion_cap_history_view">MotionCapHistoryView</string>
 </resources>

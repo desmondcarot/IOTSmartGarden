@@ -1,5 +1,6 @@
-package com.edu.tarc.iotproject
+package com.edu.tarc.iotproject.AquariumModule
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -7,12 +8,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.edu.tarc.iotproject.Light
+import com.edu.tarc.iotproject.R
 import com.edu.tarc.iotproject.databinding.ActivityAquariumBinding
 import com.google.firebase.Firebase
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 
@@ -43,7 +45,8 @@ class Aquarium : AppCompatActivity() {
                     binding.minHumidity.setText(config.hum_min!!.toString())
                     binding.maxHumidity.setText(config.hum_max!!.toString())
                     binding.etInterval.setText(config.interval!!.toString())
-                    binding.maxTemp.setText(config.temperature_threshold!!.toString())
+                    binding.maxTemp.setText(config.temp_max!!.toString())
+                    binding.minTemp.setText(config.temp_min!!.toString())
                 }
             }
 
@@ -51,6 +54,19 @@ class Aquarium : AppCompatActivity() {
                 Toast.makeText(this@Aquarium, "Nice bruh", Toast.LENGTH_SHORT).show()
             }
         })
+
+
+        binding.btnDataHistory.setOnClickListener{
+            val intent = Intent(this, AquariumViewData::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnViewMotionCapture.setOnClickListener{
+            val intent = Intent(this, MotionCapActivity::class.java)
+            startActivity(intent)
+        }
+
+
 
 
         binding.swBuzzer.setOnCheckedChangeListener{ buttonView, isChecked ->
@@ -104,13 +120,13 @@ class Aquarium : AppCompatActivity() {
                     return@setOnClickListener
                 }
 
-                db.child("Aquarium Module").child("config").child("temperature_threshold").setValue(maxTemp)
+                db.child("Aquarium Module").child("config").child("temp_max").setValue(maxTemp)
                     .addOnSuccessListener {
-                        Log.d("Config Changes", "hum max: $minTemp")
+                        Log.d("Config Changes", "hum max: $maxTemp")
                     }
-//                db.child("Aquarium Module").child("config").child("hum_min").setValue(maxTemp).addOnSuccessListener {
-//                        Log.d("Config Changes", "hum min: $maxTemp")
-//                    }
+                db.child("Aquarium Module").child("config").child("temp_min").setValue(minTemp).addOnSuccessListener {
+                        Log.d("Config Changes", "hum min: $minTemp")
+                    }
 
             } else {
                 Toast.makeText(
@@ -180,7 +196,8 @@ class Aquarium : AppCompatActivity() {
         var hum_min: Int? = null,
         var interval: Int? = null,
         var lastCaptureTime: String? = null,
-        var temperature_threshold: Int? = null
+        var temp_max: Int? = null,
+        var temp_min: Int? = null
     ) {
         constructor() : this(null, null, null, null, null, null, null)
     }
