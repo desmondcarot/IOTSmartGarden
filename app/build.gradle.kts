@@ -78,6 +78,5 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
     implementation ("com.firebaseui:firebase-ui-storage:8.0.2")
-    debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }

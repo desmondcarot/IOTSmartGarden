@@ -9,42 +9,24 @@
 
     <ImageView
         android:id="@+id/btnSmartBirdFeed"
-        android:layout_width="83dp"
-        android:layout_height="58dp"
+        android:layout_width="93dp"
+        android:layout_height="63dp"
         android:background="@drawable/bird"
         app:layout_constraintBottom_toBottomOf="@+id/MainTitle"
         app:layout_constraintTop_toTopOf="@+id/MainTitle"
         tools:srcCompat="@drawable/bird" />
 
-    <EditText
-        android:id="@+id/Date"
-        android:layout_width="208dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="101dp"
-        android:layout_marginTop="107dp"
-        android:layout_marginBottom="762dp"
-        android:ems="10"
-        android:inputType="date"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/MainTitle"
-        app:layout_constraintHorizontal_bias="0.901"
-        app:layout_constraintStart_toStartOf="@+id/MainTitle"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
     <TextView
         android:id="@+id/MainTitle"
         android:layout_width="197dp"
         android:layout_height="56dp"
+        android:layout_marginTop="16dp"
         android:text="Bird Feeding"
         android:textAlignment="center"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/Date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.784" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/SoundLevel"
@@ -103,13 +85,13 @@
 
     <Button
         android:id="@+id/ManualFeeding"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="157dp"
+        android:layout_height="52dp"
         android:layout_marginTop="391dp"
         android:text="Manual Feeding"
-        app:layout_constraintEnd_toEndOf="@+id/MainTitle"
-        app:layout_constraintHorizontal_bias="0.555"
-        app:layout_constraintStart_toStartOf="@+id/MainTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -126,12 +108,12 @@
 
     <Button
         android:id="@+id/FeedingHistory"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="132dp"
-        android:layout_marginTop="452dp"
+        android:layout_width="154dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="456dp"
+        android:layout_marginEnd="120dp"
         android:text="Feeding History"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -146,12 +128,38 @@
 
     <TextView
         android:id="@+id/txtHistoryList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scrollbars="vertical"
         android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/FeedingHistory" />
+        app:layout_constraintTop_toBottomOf="@+id/FeedingHistory"/>
+
+    <TextView
+        android:id="@+id/FeedLevel"
+        android:layout_width="113dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="8dp"
+        android:text="Feed level: "
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.077"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txtfeedLevel" />
+
+    <EditText
+        android:id="@+id/txtfeedLevel"
+        android:layout_width="196dp"
+        android:layout_height="39dp"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="@+id/txtStatus"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.711"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtdistance"
+        app:layout_constraintVertical_bias="0.244" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

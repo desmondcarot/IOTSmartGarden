@@ -1,6 +1,8 @@
 package com.edu.tarc.iotproject.BirdModule
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -29,7 +31,7 @@ class BirdFeed : AppCompatActivity() {
             insets
         }
 
-        val dateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
+        val dateFormat = SimpleDateFormat("MM-dd-yyyy HH:mm:ss")
 
         var db = Firebase.database.getReference()
         var BirdModule = db.child("Bird Module")
@@ -54,6 +56,7 @@ class BirdFeed : AppCompatActivity() {
 
                 binding.txtdistance.setText(latestEntry!!.distance.toString() + "cm")
                 binding.txtsoundLevel.setText(latestEntry!!.sound_level.toString()+"dB")
+                binding.txtfeedLevel.setText(latestEntry!!.feed_level)
                 binding.txtStatus.setText(latestEntry!!.event)
                 binding.txtCurrentTime.setText(latestEntry.timestamp)
 
@@ -72,6 +75,7 @@ class BirdFeed : AppCompatActivity() {
 
         binding.FeedingHistory.setOnClickListener {
             BirdModule.addValueEventListener(object: ValueEventListener {
+                @SuppressLint("DefaultLocale")
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val birdList = StringBuilder()
                     if (snapshot == null) {
@@ -85,17 +89,19 @@ class BirdFeed : AppCompatActivity() {
                     var x = 1
                     for (childSnapshot in snapshot.children) {
                         val birdEvent = childSnapshot.getValue(BirdEvent::class.java)!!
-                        birdList.append(String.format("%d) Time: %s, sound level: %d, distance: %d, event: %s\n\n",
+                        birdList.append(String.format("%d) Time: %s, sound level: %d, distance: %d, feed_level: %s, event: %s\n\n",
                             x,
                             birdEvent.timestamp,
                             birdEvent.sound_level,
                             birdEvent.distance,
+                            birdEvent.feed_level,
                             birdEvent.event))
                         Log.d("BIrd Event", birdEvent.distance.toString())
                         x++
                     }
 
                     binding.txtHistoryList.text = birdList
+                    binding.txtHistoryList.movementMethod = ScrollingMovementMethod.getInstance()
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -111,6 +117,7 @@ class BirdFeed : AppCompatActivity() {
         val event: String,
         val sound_level: Int,
         val distance: Int,
-    ){  constructor() : this("", "", 2, 1)
+        val feed_level: String,
+    ){  constructor() : this("", "", 2, 1,"")
     }
 }
