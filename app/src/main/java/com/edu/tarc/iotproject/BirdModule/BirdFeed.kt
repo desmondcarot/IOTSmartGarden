@@ -86,10 +86,10 @@ class BirdFeed : AppCompatActivity() {
                         ).show()
                         return
                     }
-                    var x = 1
+                    var x = snapshot.childrenCount
                     for (childSnapshot in snapshot.children) {
                         val birdEvent = childSnapshot.getValue(BirdEvent::class.java)!!
-                        birdList.append(String.format("%d) Time: %s, sound level: %d, distance: %d, feed_level: %s, event: %s\n\n",
+                        birdList.insert(0, String.format("%d) Time: %s, sound level: %d, distance: %d, feed_level: %s, event: %s\n\n",
                             x,
                             birdEvent.timestamp,
                             birdEvent.sound_level,
@@ -97,7 +97,7 @@ class BirdFeed : AppCompatActivity() {
                             birdEvent.feed_level,
                             birdEvent.event))
                         Log.d("BIrd Event", birdEvent.distance.toString())
-                        x++
+                        x--
                     }
 
                     binding.txtHistoryList.text = birdList

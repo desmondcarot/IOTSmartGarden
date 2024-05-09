@@ -3,4 +3,9 @@
     <string name="title">Smart Garden!</string>
     <string name="config"><u>Configs</u></string>
     <string name="title_activity_motion_cap_history_view">MotionCapHistoryView</string>
+    <string-array name="Sensitivity">
+        <item>Low</item>
+        <item>Mid</item>
+        <item>High</item>
+    </string-array>
 </resources>

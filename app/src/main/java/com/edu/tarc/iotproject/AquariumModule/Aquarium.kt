@@ -3,25 +3,24 @@ package com.edu.tarc.iotproject.AquariumModule
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.edu.tarc.iotproject.Light
 import com.edu.tarc.iotproject.R
 import com.edu.tarc.iotproject.databinding.ActivityAquariumBinding
 import com.google.firebase.Firebase
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.database
+import com.google.firebase.database.*
 
 class Aquarium : AppCompatActivity() {
 
     private lateinit var binding: ActivityAquariumBinding
     private lateinit var db: DatabaseReference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -32,22 +31,23 @@ class Aquarium : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        var config: Config
-        db = Firebase.database.reference
 
-        db.child("Aquarium Module").child("config").addValueEventListener(object: ValueEventListener{
+        db = Firebase.database.reference.child("Aquarium Module").child("config")
+
+
+        var sensitivity = resources.getStringArray(R.array.Sensitivity)
+        var spinner = binding.spinner
+
+        if (spinner != null) {
+            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, sensitivity)
+            spinner.adapter = adapter
+        }
+
+        db.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                config = snapshot.getValue(Config::class.java)!!
+                val config = snapshot.getValue(Config::class.java)
                 Log.d("Config Log", "Config: $config")
-                if(config != null){
-                    binding.swBuzzer.isChecked = config.buzzer_enabled!!
-                    binding.swDHT.isChecked = config.dht_enabled!!
-                    binding.minHumidity.setText(config.hum_min!!.toString())
-                    binding.maxHumidity.setText(config.hum_max!!.toString())
-                    binding.etInterval.setText(config.interval!!.toString())
-                    binding.maxTemp.setText(config.temp_max!!.toString())
-                    binding.minTemp.setText(config.temp_min!!.toString())
-                }
+                config?.let { updateUI(it) }
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -56,149 +56,120 @@ class Aquarium : AppCompatActivity() {
         })
 
 
-        binding.btnDataHistory.setOnClickListener{
-            val intent = Intent(this, AquariumViewData::class.java)
-            startActivity(intent)
+
+
+        binding.btnDataHistory.setOnClickListener {
+            startActivity(Intent(this, AquariumViewData::class.java))
         }
 
-        binding.btnViewMotionCapture.setOnClickListener{
-            val intent = Intent(this, MotionCapActivity::class.java)
-            startActivity(intent)
+        binding.btnViewMotionCapture.setOnClickListener {
+            startActivity(Intent(this, MotionCapActivity::class.java))
         }
 
+        binding.swBuzzer.setOnCheckedChangeListener { _, isChecked -> updateConfig("buzzer_enabled", isChecked) }
+        binding.swDHT.setOnCheckedChangeListener { _, isChecked -> updateConfig("dht_enabled", isChecked) }
+        binding.swMotCap.setOnCheckedChangeListener{_, isChecked -> updateConfig("motion_cap_enabled", isChecked)}
+        binding.swCapImg.setOnCheckedChangeListener{_, isChecked -> updateConfig("capture_img", isChecked)}
+        binding.btnSetTemp.setOnClickListener { updateTemperature() }
+        binding.btnSetHum.setOnClickListener { updateHumidity() }
+        binding.btnSetInterval.setOnClickListener { updateInterval() }
 
+        spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                updateConfig("motion_cap_sens", sensitivity[p2])
+            }
 
-
-        binding.swBuzzer.setOnCheckedChangeListener{ buttonView, isChecked ->
-
-            if (isChecked){
-                db.child("Aquarium Module").child("config").child("buzzer_enabled").setValue(true).addOnSuccessListener {
-                    Log.d("Config Changes", "Changed to true")
-                }
-            }else{
-                db.child("Aquarium Module").child("config").child("buzzer_enabled").setValue(false).addOnSuccessListener {
-                    Log.d("Config Changes", "Changed to false")
-                }
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // write code to perform some action
             }
         }
+    }
 
-        binding.swDHT.setOnCheckedChangeListener{btnView, isChecked ->
-            if (isChecked){
-                db.child("Aquarium Module").child("config").child("dht_enabled").setValue(true).addOnSuccessListener {
-                    Log.d("Config Changes", "Changed to true")
-                }
-            }else{
-                db.child("Aquarium Module").child("config").child("dht_enabled").setValue(false).addOnSuccessListener {
-                    Log.d("Config Changes", "Changed to false")
-                }
-            }
+    private fun updateConfig(key: String, value: Any) {
+        db.child(key).setValue(value).addOnSuccessListener {
+            Log.d("Config Changes", "Changed $key to $value")
+        }
+    }
+    private fun updateTemperature() {
+        val minTemp = binding.minTemp.text.toString().toDoubleOrNull() ?: return
+        val maxTemp = binding.maxTemp.text.toString().toDoubleOrNull() ?: return
+
+        if (minTemp >= maxTemp || minTemp < 0.0 || maxTemp > 50.0) {
+            Toast.makeText(
+                this@Aquarium,
+                "Invalid temperature values",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
         }
 
-        binding.btnSetTemp.setOnClickListener {
-            val tempmin = binding.minTemp.text.toString()
-            val tempmax = binding.maxTemp.text.toString()
+        updateConfig("temp_max", maxTemp)
+        updateConfig("temp_min", minTemp)
+    }
 
-            if (tempmin.isNotEmpty() && tempmax.isNotEmpty()) {
-                val minTemp = tempmin.toDouble()
-                val maxTemp = tempmax.toDouble()
+    private fun updateHumidity() {
+        val minHum = binding.minHumidity.text.toString().toIntOrNull() ?: return
+        val maxHum = binding.maxHumidity.text.toString().toIntOrNull() ?: return
 
-                if (minTemp < 0.0 || maxTemp > 50.0) {
-                    Toast.makeText(
-                        this@Aquarium,
-                        "Please Enter temperature threshold between 0°Cto 50°C",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@setOnClickListener
-                }
-
-                if (minTemp >= maxTemp) {
-                    Toast.makeText(
-                        this@Aquarium,
-                        "Please make sure max temp is more than min temp",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@setOnClickListener
-                }
-
-                db.child("Aquarium Module").child("config").child("temp_max").setValue(maxTemp)
-                    .addOnSuccessListener {
-                        Log.d("Config Changes", "hum max: $maxTemp")
-                    }
-                db.child("Aquarium Module").child("config").child("temp_min").setValue(minTemp).addOnSuccessListener {
-                        Log.d("Config Changes", "hum min: $minTemp")
-                    }
-
-            } else {
-                Toast.makeText(
-                    this@Aquarium,
-                    "Please make sure the field is not empty",
-                    Toast.LENGTH_SHORT
-                ).show()
-                Log.d("Config Changes", "Min or max temp is empty")
-            }
+        if (minHum >= maxHum || minHum < 0 || minHum > 100) {
+            Toast.makeText(
+                this@Aquarium,
+                "Invalid humidity values",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
         }
 
-        binding.btnSetHum.setOnClickListener{
-            val hum_min = binding.minHumidity.text.toString()
-            val hum_max = binding.maxHumidity.text.toString()
+        updateConfig("hum_max", maxHum)
+        updateConfig("hum_min", minHum)
+    }
 
-
-            if (hum_min.isNotEmpty() && hum_max.isNotEmpty()) {
-                val minHum = hum_min.toInt()
-                val maxHum = hum_max.toInt()
-
-                if (minHum < 0 || minHum > 100){
-                    Toast.makeText(this@Aquarium, "Please Enter humidity threshold between 0% to 100%", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-
-                if (minHum >= maxHum){
-                    Toast.makeText(this@Aquarium, "Please make sure max hum is more than min hum", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-
-                db.child("Aquarium Module").child("config").child("hum_max").setValue(maxHum).addOnSuccessListener {
-                    Log.d("Config Changes", "hum max: $minHum")
-                }
-                db.child("Aquarium Module").child("config").child("hum_min").setValue(minHum).addOnSuccessListener {
-                    Log.d("Config Changes", "hum min: $maxHum")
-                }
-
-            } else {
-                Toast.makeText(this@Aquarium, "Please make sure the field is not empty", Toast.LENGTH_SHORT).show()
-                Log.d("Config Changes", "Min or max temp is empty")
-            }
+    private fun updateInterval() {
+        val interval = binding.etInterval.text.toString().toIntOrNull() ?: return
+        if (interval <= 0) {
+            Toast.makeText(
+                this@Aquarium,
+                "Interval must be greater than 0",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
         }
+        updateConfig("interval", interval)
+    }
 
-        binding.btnSetInterval.setOnClickListener {
-            val intervalString = binding.etInterval.text.toString()
-
-            if (intervalString.isNotEmpty()){
-                val interval = intervalString.toInt()
-
-                if (interval <= 0){
-                    Toast.makeText(this@Aquarium, "Please make sure interval is more than 0", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-
-                db.child("Aquarium Module").child("config").child("interval").setValue(interval).addOnSuccessListener {
-                    Log.d("Config Changes", "Interval: $interval")
-                }
-
+    private fun updateUI(config: Config) {
+        with(binding) {
+            swBuzzer.isChecked = config.buzzer_enabled ?: false
+            swDHT.isChecked = config.dht_enabled ?: false
+            minHumidity.setText(config.hum_min?.toString() ?: "")
+            maxHumidity.setText(config.hum_max?.toString() ?: "")
+            etInterval.setText(config.interval?.toString() ?: "")
+            maxTemp.setText(config.temp_max?.toString() ?: "")
+            minTemp.setText(config.temp_min?.toString() ?: "")
+            swCapImg.isChecked = config.capture_img ?: false
+            swMotCap.isChecked = config.motion_cap_enabled ?: false
+            val selectedIndex = when (config.motion_cap_sens) {
+                "Low" -> 0
+                "High" -> 2
+                else -> 1
             }
+
+            Log.d("selected Index", selectedIndex.toString())
+            spinner.setSelection(selectedIndex)
         }
     }
 
     data class Config(
-        var buzzer_enabled: Boolean? = null,
-        var dht_enabled: Boolean? = null,
-        var hum_max: Int? = null,
-        var hum_min: Int? = null,
-        var interval: Int? = null,
-        var lastCaptureTime: String? = null,
-        var temp_max: Int? = null,
-        var temp_min: Int? = null
-    ) {
-        constructor() : this(null, null, null, null, null, null, null)
-    }
+        var buzzer_enabled: Boolean? = false,
+        var dht_enabled: Boolean? = false,
+        var hum_max: Int? = 0,
+        var hum_min: Int? = 0,
+        var interval: Int? = 0,
+        var lastCaptureTime: String? = "",
+        var temp_max: Int? = 0,
+        var temp_min: Int? = 0,
+        var motion_cap_enabled: Boolean? = false,
+        var motion_cap_sens: String? = "",
+        var capture_img: Boolean? = false
+    )
 }
